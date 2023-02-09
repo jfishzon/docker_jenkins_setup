@@ -1,0 +1,207 @@
+def maxNum = 0
+
+pipeline {
+    agent any
+    stages {
+        stage(“generate_num”) {
+            parallel {
+                stage(“Agent1”) {
+                    steps {
+                        script {
+                            stageMaxNum1 = sh (
+                                script: 'shuf -i 2000-50000 -n 1',
+                                returnStdout: true
+                            )
+                            Integer stageMaxNumInt1 = stageMaxNum1 as Integer
+                            if (stageMaxNumInt1 > maxNum){
+                                maxNum = stageMaxNumInt1
+                                writeFile file: 'results.txt', text: stageMaxNum1
+                            }
+                            echo stageMaxNum1
+                            
+                            
+                        }
+                    }
+                    
+                }
+                stage(“Agent2”) {
+                    steps {
+                        script {
+                            stageMaxNum2 = sh (
+                                script: 'shuf -i 2000-50000 -n 1',
+                                returnStdout: true
+                            )
+                            Integer stageMaxNumInt2 = stageMaxNum2 as Integer
+                            if (stageMaxNumInt2 > maxNum){
+                                maxNum = stageMaxNumInt2
+                                writeFile file: 'results.txt', text: stageMaxNum2
+                            }
+                            echo stageMaxNum2
+                            
+                            
+                        }
+                    }
+                    
+                }
+                stage(“Agent3”) {
+                    steps {
+                        script {
+                            stageMaxNum3 = sh (
+                                script: 'shuf -i 2000-50000 -n 1',
+                                returnStdout: true
+                            )
+                            Integer stageMaxNumInt3 = stageMaxNum3 as Integer
+                            if (stageMaxNumInt3 > maxNum){
+                                maxNum = stageMaxNumInt3
+                                writeFile file: 'results.txt', text: stageMaxNum3
+                            }
+                            echo stageMaxNum3
+                            
+                            
+                        }
+                    }
+                    
+                }
+                stage(“Agent4”) {
+                    steps {
+                        script {
+                            stageMaxNum4 = sh (
+                                script: 'shuf -i 2000-50000 -n 1',
+                                returnStdout: true
+                            )
+                            Integer stageMaxNumInt4 = stageMaxNum4 as Integer
+                            if (stageMaxNumInt4 > maxNum){
+                                maxNum = stageMaxNumInt4
+                                writeFile file: 'results.txt', text: stageMaxNum4
+                            }
+                            echo stageMaxNum4
+                            
+                            
+                        }
+                    }
+                    
+                }
+                stage(“Agent5”) {
+                    steps {
+                        script {
+                            stageMaxNum5 = sh (
+                                script: 'shuf -i 2000-50000 -n 1',
+                                returnStdout: true
+                            )
+                            Integer stageMaxNumInt5 = stageMaxNum5 as Integer
+                            if (stageMaxNumInt5 > maxNum){
+                                maxNum = stageMaxNumInt5
+                                writeFile file: 'results.txt', text: stageMaxNum5
+                            }
+                            echo stageMaxNum5
+                            
+                            
+                        }
+                    }
+                    
+                }
+                stage(“Agent6”) {
+                    steps {
+                        script {
+                            stageMaxNum6 = sh (
+                                script: 'shuf -i 2000-50000 -n 1',
+                                returnStdout: true
+                            )
+                            Integer stageMaxNumInt6 = stageMaxNum6 as Integer
+                            if (stageMaxNumInt6 > maxNum){
+                                maxNum = stageMaxNumInt6
+                                writeFile file: 'results.txt', text: stageMaxNum6
+                            }
+                            echo stageMaxNum6
+                            
+                            
+                        }
+                    }
+                    
+                }
+                stage(“Agent7”) {
+                    steps {
+                        script {
+                            stageMaxNum7 = sh (
+                                script: 'shuf -i 2000-50000 -n 1',
+                                returnStdout: true
+                            )
+                            Integer stageMaxNumInt7 = stageMaxNum7 as Integer
+                            if (stageMaxNumInt7 > maxNum){
+                                maxNum = stageMaxNumInt7
+                                writeFile file: 'results.txt', text: stageMaxNum7
+                            }
+                            echo stageMaxNum7
+                            
+                            
+                        }
+                    }
+                    
+                }
+                stage(“Agent8”) {
+                    steps {
+                        script {
+                            stageMaxNum8 = sh (
+                                script: 'shuf -i 2000-50000 -n 1',
+                                returnStdout: true
+                            )
+                            Integer stageMaxNumInt8 = stageMaxNum8 as Integer
+                            if (stageMaxNumInt8 > maxNum){
+                                maxNum = stageMaxNumInt8
+                                writeFile file: 'results.txt', text: stageMaxNum8
+                            }
+                            echo stageMaxNum8
+                            
+                            
+                        }
+                    }
+                    
+                }
+                stage(“Agent9”) {
+                    steps {
+                        script {
+                            stageMaxNum9 = sh (
+                                script: 'shuf -i 2000-50000 -n 1',
+                                returnStdout: true
+                            )
+                            Integer stageMaxNumInt9 = stageMaxNum9 as Integer
+                            if (stageMaxNumInt9 > maxNum){
+                                maxNum = stageMaxNumInt9
+                                writeFile file: 'results.txt', text: stageMaxNum9
+                            }
+                            echo stageMaxNum9
+                            
+                            
+                        }
+                    }
+                    
+                }
+                stage(“Agent10”) {
+                    steps {
+                        script {
+                            stageMaxNum10 = sh (
+                                script: 'shuf -i 2000-50000 -n 1',
+                                returnStdout: true
+                            )
+                            Integer stageMaxNumInt10 = stageMaxNum10 as Integer
+                            if (stageMaxNumInt10 > maxNum){
+                                maxNum = stageMaxNumInt10
+                                writeFile file: 'results.txt', text: stageMaxNum10
+                            }
+                            echo stageMaxNum10
+                            
+                            
+                        }
+                    }
+                    
+                }
+            }
+        }
+        stage("max_num"){
+            steps {
+                echo 'results: ' + readFile('results.txt')
+                archiveArtifacts artifacts: 'results.txt'
+            }
+        }
+    }
+}

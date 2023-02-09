@@ -1,0 +1,18 @@
+pipeline {
+    agent any
+    environment {
+        AWS_CREDS = credentials('098755c5-b44f-4e80-a7f9-e283c3582be9')
+    }
+    stages {
+        stage('download_artifact_and_destroy') {
+            steps {
+                copyArtifacts(projectName: 'terraform');
+                sh '''
+                tar -xzf terraform.tar.gz
+                cd terraform
+                ./terraform destroy -auto-approve -target aws_instance.$AWS_INSTANCE_NAME -var "aws_access_key=$AWS_CREDS_USR" -var "aws_secret_key=$AWS_CREDS_PSW" -var "ssh_port=12345"
+                '''
+            }
+        }
+    }
+}

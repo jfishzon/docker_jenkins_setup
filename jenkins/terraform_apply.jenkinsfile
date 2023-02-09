@@ -1,0 +1,29 @@
+pipeline {
+    agent any
+    environment {
+        AWS_CREDS = credentials('098755c5-b44f-4e80-a7f9-e283c3582be9')
+        GIT_PAT = credentials('github_bndcy_proj')
+    }
+    stages {
+        stage('clone_git_and_run_tf') {
+            steps {
+                checkout scmGit(
+                    branches: [[name: 'main']],
+                    userRemoteConfigs: [[url: 'https://${GIT_PAT}@github.com/jonathan-work-projects/bndcy_home_assgmnt.git']])
+                copyArtifacts(projectName: 'test');
+                sh '''
+                sshPort=$(cat results.txt)
+                cd terraform
+                ./terraform init
+                ./terraform apply -auto-approve -var "aws_access_key=$AWS_CREDS_USR" -var "aws_secret_key=$AWS_CREDS_PSW" -var "ssh_port=$sshPort"
+                '''
+            }
+        }
+        stage('zip_artifacts_and_save'){
+            steps{
+                sh "tar -czf terraform.tar.gz terraform"
+                archiveArtifacts artifacts: 'terraform.tar.gz', followSymlinks: false
+            }
+        }
+    }
+}
