@@ -1,0 +1,70 @@
+<flow-definition plugin="workflow-job@1268.v6eb_e2ee1a_85a">
+<actions>
+<org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobAction plugin="pipeline-model-definition@2.2118.v31fd5b_9944b_5"/>
+<org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction plugin="pipeline-model-definition@2.2118.v31fd5b_9944b_5">
+<jobProperties/>
+<triggers/>
+<parameters/>
+<options/>
+</org.jenkinsci.plugins.pipeline.modeldefinition.actions.DeclarativeJobPropertyTrackerAction>
+</actions>
+<description/>
+<keepDependencies>false</keepDependencies>
+<properties>
+    <hudson.plugins.copyartifact.CopyArtifactPermissionProperty plugin="copyartifact@686.v6fd37018d7c2">
+        <projectNameList>
+            <string>terraform_destroy</string>
+        </projectNameList>
+</hudson.plugins.copyartifact.CopyArtifactPermissionProperty>
+<org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+<triggers>
+<jenkins.triggers.ReverseBuildTrigger>
+<spec/>
+<upstreamProjects>10xagent, </upstreamProjects>
+<threshold>
+<name>SUCCESS</name>
+<ordinal>0</ordinal>
+<color>BLUE</color>
+<completeBuild>true</completeBuild>
+</threshold>
+</jenkins.triggers.ReverseBuildTrigger>
+</triggers>
+</org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+</properties>
+<definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@3611.v201b_d9f9eb_f7">
+<script>
+pipeline {
+    agent any
+    environment {
+        AWS_CREDS = credentials('aws_creds')
+        GIT_PAT = credentials('github_pat')
+    }
+    stages {
+        stage('clone_git_and_run_tf') {
+            steps {
+                checkout scmGit(
+                    branches: [[name: 'main']],
+                    userRemoteConfigs: [[url: 'https://${GIT_PAT}@github.com/jonathan-work-projects/bndcy_home_assgmnt.git']])
+                copyArtifacts(projectName: '10xagent');
+                sh '''
+                sshPort=$(cat results.txt)
+                cd terraform
+                ./terraform init
+                ./terraform apply -auto-approve -var "aws_access_key=$AWS_CREDS_USR" -var "aws_secret_key=$AWS_CREDS_PSW" -var "ssh_port=$sshPort"
+                '''
+            }
+        }
+        stage('zip_artifacts_and_save'){
+            steps{
+                sh "tar -czf terraform.tar.gz terraform"
+                archiveArtifacts artifacts: 'terraform.tar.gz', followSymlinks: false
+            }
+        }
+    }
+}
+</script>
+<sandbox>true</sandbox>
+</definition>
+<triggers/>
+<disabled>false</disabled>
+</flow-definition>
