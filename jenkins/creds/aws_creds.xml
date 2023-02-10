@@ -2,6 +2,6 @@
   <scope>GLOBAL</scope>
   <id>aws_creds</id>
   <description>aws credentials</description>
-  <username>AKIA4BWAV64V54ZQMJ5L</username>
-  <password>VAF0jIFIFqAVEoMY34zEIjhoDEKw6KpRBeeDUb5W</password>
+  <username>access_key</username>
+  <password>secret_key</password>
 </com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl>

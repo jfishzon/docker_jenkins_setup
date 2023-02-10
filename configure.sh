@@ -2,17 +2,36 @@
 user=admin
 psw=bindecy
 
+# get secrets and replace them in creds
+access_key=$(read -p "Enter AWS Access Key ")
+secret_key=$(read -p "Enter AWS Secret Key ")
+github_pat=$(read -p "Enter GitHub PAT")
+
+sed -i "s/access_key/$access_key/g" jenkins/creds/aws_creds.xml
+sed -i "s/secret_key/$secret_key/g" jenkins/creds/aws_creds.xml
+sed -i "s/github_secret/$github_pat/g" jenkins/creds/github_pat.xml
+
+echo "checking pre-requisites..."
+if which jq ; then
+    echo "jq exists, can continue"
+else
+    echo "jq doesn't exist, attempting to install.."
+    apt-get install jq -y
+fi
+
 # install docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh ./get-docker.sh
 # add permissions
 usermod -aG docker $USER
+# build image and run
 cd docker
 docker build -t jenkins-bindecy:1.0 .
 docker run -d --name jenkins-bindecy -p 8080:8080 jenkins-bindecy:1.0
 cd ..
 
-sleep 7
+echo "waiting for container to start..."
+sleep 10
 
 # access jenkins api
 crumb=$(curl -v -X GET http://localhost:8080/crumbIssuer/api/json --user $user:$psw  \

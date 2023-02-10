@@ -1,6 +1,6 @@
 <org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl> 
    <scope>GLOBAL</scope>                                                                                          
    <id>github_pat</id> 
-   <secret>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</secret> 
+   <secret>github_secret</secret> 
    <description>prive access token for github repo</description> 
 </org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl>
