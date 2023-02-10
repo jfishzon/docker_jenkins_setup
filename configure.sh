@@ -34,7 +34,7 @@ usermod -aG docker $USER
 cd docker
 docker build -t jenkins-bindecy:1.0 .
 docker run -d --name jenkins-bindecy -p 8080:8080 jenkins-bindecy:1.0
-cd ..
+cd -
 
 echo "waiting for container to start..."
 sleep 10
@@ -54,7 +54,7 @@ curl -X POST http://localhost:8080/manage/credentials/store/system/domain/_/crea
     -H "Jenkins-Crumb: $crumb" \
     --data-raw "$data"
 done
-cd ../.. 
+cd -
 
 cd jenkins/pipelines
 for file in *
@@ -66,5 +66,5 @@ curl -X POST http://localhost:8080/createItem?name=${file%.*} --user $user:$psw 
     -H "Jenkins-Crumb: $crumb" \
     --data "$data"
 done
-cd ../..
+cd -
 echo $crumb
