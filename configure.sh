@@ -10,7 +10,7 @@ docker build -t bindecy:1.0 .
 docker run -d --name jenkins-bindecy -p 8080:8080 jenkins-bindecy:1.0
 cd ..
 
-read -p "Waiting a bit for docker instance to startup.." -t 7
+sleep 7
 
 # access jenkins api
 crumb=$(curl -v -X GET http://localhost:8080/crumbIssuer/api/json --user $user:$psw  \
