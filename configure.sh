@@ -37,7 +37,7 @@ docker run -d --name jenkins-bindecy -p 8080:8080 jenkins-bindecy:1.0
 cd -
 
 echo "waiting for container to start..."
-sleep 10
+sleep 15
 
 # access jenkins api
 crumb=$(curl -v -c cookies.txt -X GET http://localhost:8080/crumbIssuer/api/json --user $user:$psw  \ | jq -r '.crumb')
