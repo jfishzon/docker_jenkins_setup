@@ -5,6 +5,8 @@ psw=bindecy
 # install docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh ./get-docker.sh
+# add permissions
+usermod -aG docker $USER
 cd docker
 docker build -t bindecy:1.0 .
 docker run -d --name jenkins-bindecy -p 8080:8080 jenkins-bindecy:1.0
