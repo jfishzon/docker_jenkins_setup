@@ -25,7 +25,7 @@
 <triggers>
 <jenkins.triggers.ReverseBuildTrigger>
 <spec/>
-<upstreamProjects>terraform, </upstreamProjects>
+<upstreamProjects>terraform_apply, </upstreamProjects>
 <threshold>
 <name>SUCCESS</name>
 <ordinal>0</ordinal>
