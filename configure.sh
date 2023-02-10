@@ -1,12 +1,18 @@
 #!bin/bash
+
+while getopts a:s:g: flag
+do
+    case "${flag}" in
+        a) access_key=${OPTARG};;
+        s) secret_key=${OPTARG};;
+        g) github_pat=${OPTARG};;
+    esac
+done
+
 user=admin
 psw=bindecy
 
 # get secrets and replace them in creds
-access_key=$(read -p "Enter AWS Access Key ")
-secret_key=$(read -p "Enter AWS Secret Key ")
-github_pat=$(read -p "Enter GitHub PAT")
-
 sed -i "s/access_key/$access_key/g" jenkins/creds/aws_creds.xml
 sed -i "s/secret_key/$secret_key/g" jenkins/creds/aws_creds.xml
 sed -i "s/github_secret/$github_pat/g" jenkins/creds/github_pat.xml
