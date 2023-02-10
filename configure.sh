@@ -40,16 +40,18 @@ echo "waiting for container to start..."
 sleep 10
 
 # access jenkins api
-crumb=$(curl -v -X GET http://localhost:8080/crumbIssuer/api/json --user $user:$psw  \
--H "Cookie: JSESSIONID.56e4b3b7=node0xsbnd4uu2dt41j69vxgq0zfml1.node0; JSESSIONID.fd4e3cc2=node0sv2b0t44x0wq10eyfiohqnomq22.node0" | jq -r '.crumb')
+crumb=$(curl -v -c cookies.txt -X GET http://localhost:8080/crumbIssuer/api/json --user $user:$psw  \ | jq -r '.crumb')
 
+# read cookies
+cookies=$(grep -E -i 'JSESSIONID.*$' cookies.txt  -o)
+cookies=$(echo $cookies | sed 's/ /=/g')
 #configure secrets
 cd jenkins/creds
 for file in *
 do
 data=$(cat $file)
 curl -X POST http://localhost:8080/manage/credentials/store/system/domain/_/createCredentials --user $user:$psw\
-    -H "Cookie: JSESSIONID.56e4b3b7=node0xsbnd4uu2dt41j69vxgq0zfml1.node0; JSESSIONID.fd4e3cc2=node0sv2b0t44x0wq10eyfiohqnomq22.node0" \
+    -H "Cookie: $cookies" \
     -H "Content-Type:application/xml" \
     -H "Jenkins-Crumb: $crumb" \
     --data-raw "$data"
@@ -61,10 +63,10 @@ for file in *
 do
 data=$(cat $file)
 curl -X POST http://localhost:8080/createItem?name=${file%.*} --user $user:$psw \
-    -H "Cookie: JSESSIONID.56e4b3b7=node0xsbnd4uu2dt41j69vxgq0zfml1.node0; JSESSIONID.fd4e3cc2=node0sv2b0t44x0wq10eyfiohqnomq22.node0" \
+    -H "Cookie: $cookies" \
     -H "Content-Type:application/xml" \
     -H "Jenkins-Crumb: $crumb" \
     --data "$data"
 done
 cd -
-echo $crumb
+echo $cookies
