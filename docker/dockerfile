@@ -4,7 +4,7 @@ FROM jenkins/jenkins:lts
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 # create default user
 ENV JENKINS_USER admin
-ENV JENKINS_PASS bindecy
+ENV JENKINS_PASS password
 COPY default-user.groovy /usr/share/jenkins/ref/init.groovy.d/
 # install plugins
 COPY plugins.txt /usr/share/jenkins/plugins.txt
