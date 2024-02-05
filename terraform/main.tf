@@ -21,11 +21,11 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"]
 }
 
-resource "aws_instance" "bindecy" {
+resource "aws_instance" "ssh_host" {
     ami = data.aws_ami.ubuntu.id
     instance_type = "t2.micro"
     associate_public_ip_address = true
-    security_groups = [aws_security_group.bindecy_sg.name]
+    security_groups = [aws_security_group.ssh_sg.name]
     user_data = <<EOF
 #!/bin/bash
 port=${var.ssh_port}
@@ -34,9 +34,9 @@ systemctl restart sshd
 EOF
 }
 
-resource "aws_security_group" "bindecy_sg" {
-  name = "bindecy_sg"
-  description = "bindecy sg to apply SSH rule"
+resource "aws_security_group" "ssh_sg" {
+  name = "ssh_sg"
+  description = "sg to apply SSH rule"
   ingress {
       description      = "Custom SSH port to instance"
       from_port        = var.ssh_port
