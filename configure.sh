@@ -10,7 +10,7 @@ do
 done
 
 user=admin
-psw=bindecy
+psw=password
 
 # get secrets and replace them in creds
 sed -i "s/access_key/$access_key/g" jenkins/creds/aws_creds.xml
@@ -32,8 +32,8 @@ sh ./get-docker.sh
 usermod -aG docker $USER
 # build image and run
 cd docker
-docker build -t jenkins-bindecy:1.0 .
-docker run -d --name jenkins-bindecy -p 8080:8080 jenkins-bindecy:1.0
+docker build -t jenkins-host:1.0 .
+docker run -d --name jenkins-host -p 8080:8080 jenkins-host:1.0
 cd -
 
 echo "waiting for container to start..."
